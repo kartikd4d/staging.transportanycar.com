@@ -2537,7 +2537,7 @@
             myFunction(x);
         });
 
-        var jobInfoUrl = "{{ route('transporter.job_information', ':id') }}";
+       /* var jobInfoUrl = "{{ route('transporter.job_information', ':id') }}";
 
         $(document).on('click', '.car-row', function(e) {
             e.preventDefault(); // Prevent default action initially
@@ -2558,7 +2558,7 @@
                     window.location.href = url; // Redirect to the URL
                 }
             }); // Adjust delay time if needed
-        });
+        });*/
 
         $(document).ready(function() {
             $("#jobsrch_form_blog").validate({

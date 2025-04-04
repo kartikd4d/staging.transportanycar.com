@@ -38,8 +38,8 @@ $auth_user = Auth::user();
                     fill="black" />
             </svg>
         </a>
-        <div class="conversation_user transportor-chat-header d-flex flex-wrap align-items-center text-left">
-            <div style="border-radius:5px; overflow: hidden; flex: 1 0 0;">
+        <div class="conversation_user transportor-chat-header d-flex  align-items-center text-left">
+            <div style="border-radius:5px; overflow: hidden; flex: 1 0 80px;">
                 @if ($quote->image == NULL)
                 <img src="{{ asset('uploads/no_car_image.png') }}" alt="" width="80" height="50"
                 style="max-width: 100%;" />

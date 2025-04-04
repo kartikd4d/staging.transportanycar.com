@@ -26,6 +26,7 @@ use App\CompanyDetail;
 use App\Services\SmsService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends WebController
 {
@@ -560,20 +561,24 @@ class DashboardController extends WebController
             Log::error('Error sending email: ' . $ex->getMessage());
         }
         // Run the outbid notification command
-        if (App::environment('production')) {
-            $command = '/usr/local/bin/php /home/pfltvaho/public_html/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-        } elseif ((App::environment('staging'))) {
-            $command = '/usr/local/bin/php /home/pfltvaho/staging.transportanycar.com/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-        } else {
-            $command = '/usr/bin/php /var/www/laravel/car-app/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-        }
-        exec($command, $output, $returnVar);
+        // if (App::environment('production')) {
+        //     $command = '/usr/local/bin/php /home/pfltvaho/public_html/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+        // } elseif ((App::environment('staging'))) {
+        //     $command = '/usr/local/bin/php /home/pfltvaho/staging.transportanycar.com/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+        // } else {
+        //     $command = '/usr/bin/php /var/www/laravel/car-app/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+        // }
+        // exec($command, $output, $returnVar);
 
-        if ($returnVar !== 0) {
-            // Handle the error based on the return code
-            Log::error('Error running send:outbid-notifications command. Return code: ' . $returnVar);
-        }
-
+        // if ($returnVar !== 0) {
+        //     // Handle the error based on the return code
+        //     Log::error('Error running send:outbid-notifications command. Return code: ' . $returnVar);
+        // }
+        Artisan::call('send:outbid-notifications', [
+            'quote_id' => $request->quote_id,
+            'transporter_payment' => $quoteDetails['transporter_payment'],
+            'transporter_id' => $user_data->id,
+            ]);
         return response()->json(['success' => true]);
     }
     // end d4d developer - k
@@ -976,19 +981,25 @@ class DashboardController extends WebController
             } catch (\Exception $ex) {
                 Log::error('Error sending email: ' . $ex->getMessage());
             }
-            if (App::environment('production')) {
-                $command = '/usr/local/bin/php /home/pfltvaho/public_html/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-            } elseif ((App::environment('staging'))) {
-                $command = '/usr/local/bin/php /home/pfltvaho/staging.transportanycar.com/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-            } else {
-                $command = '/usr/bin/php /var/www/laravel/car-app/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
-            }
-            exec($command, $output, $returnVar);
+            // if (App::environment('production')) {
+            //     $command = '/usr/local/bin/php /home/pfltvaho/public_html/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+            // } elseif ((App::environment('staging'))) {
+            //     $command = '/usr/local/bin/php /home/pfltvaho/staging.transportanycar.com/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+            // } else {
+            //     $command = '/usr/bin/php /var/www/laravel/car-app/artisan send:outbid-notifications ' . $request->quote_id . ' ' . $quoteDetails['transporter_payment'] . ' ' . $user_data->id;
+            // }
+            // exec($command, $output, $returnVar);
 
-            if ($returnVar !== 0) {
-                // Handle the error based on the return code
-                Log::error('Error running send:outbid-notifications command. Return code: ' . $returnVar);
-            }
+            // if ($returnVar !== 0) {
+            //     // Handle the error based on the return code
+            //     Log::error('Error running send:outbid-notifications command. Return code: ' . $returnVar);
+            // }
+
+            Artisan::call('send:outbid-notifications', [
+                'quote_id' => $request->quote_id,
+                'transporter_payment' => $quoteDetails['transporter_payment'],
+                'transporter_id' => $user_data->id,
+                ]);
             return response()->json(['status' => true, 'message' => 'Quote amount updated successfully']);
         } else {
             return response()->json(['status' => false, 'message' => 'Quote not found']);
